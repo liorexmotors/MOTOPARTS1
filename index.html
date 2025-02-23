@@ -3,40 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>חלפים משומשים לאופנועים</title>
-    <link href="https://fonts.googleapis.com/css2?family=Alef:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <title>חלקי חילוף משומשים לאופנועים וקטנועים</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F2F2F2;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            margin: 0;
+        }
+        .chat-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: white;
+            border: 2px solid #FF6600;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        #chat-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        #chat-suggestion {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .btn {
+            background-color: #FF6600;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .popup-content {
+            background-color: white;
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .popup input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <h1>חלקי חילוף משומשים לאופנועים וקטנועים – בקלות ובמהירות!</h1>
+    </header>
+
     <div class="chat-container">
-        <div class="chat-messages" id="chatMessages"></div>
-        <div class="chat-input">
-            <input type="text" id="userInput" placeholder="הקלד את בקשתך כאן...">
-            <button id="sendButton">שלח</button>
-        </div>
+        <input type="text" id="chat-input" placeholder="הקלד כאן את החלק המבוקש...">
+        <div id="chat-suggestion">מומלץ לציין יצרן, דגם, שנת ייצור וצבע לקבלת תוצאה טובה יותר.</div>
+        <button class="btn" onclick="sendRequest()">שלח בקשה</button>
     </div>
 
-    <div class="banners">
-        <div class="banner">באנר 1</div>
-        <div class="banner">באנר 2</div>
-        <div class="banner">באנר 3</div>
-    </div>
-
-    <div id="registrationPopup" class="popup">
+    <div id="registration-popup" class="popup">
         <div class="popup-content">
             <h2>הרשמה</h2>
-            <input type="text" id="fullName" placeholder="שם מלא">
-            <input type="email" id="email" placeholder="כתובת מייל">
-            <input type="tel" id="phone" placeholder="מספר נייד">
-            <select id="vehicleType">
-                <option value="">על איזה כלי אני רוכב?</option>
-                <option value="scooter">קטנוע</option>
-                <option value="motorcycle">אופנוע</option>
-            </select>
-            <button id="registerButton">הרשם</button>
+            <input type="text" id="full-name" placeholder="שם מלא">
+            <input type="email" id="email" placeholder="אימייל">
+            <input type="tel" id="phone" placeholder="מספר טלפון">
+            <button class="btn" onclick="submitRegistration()">הרשם</button>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <div id="confirmation-popup" class="popup">
+        <div class="popup-content">
+            <h2>אישור</h2>
+            <p>בקשתך נשלחה! האם אתה מאשר את שליחתה למרכזי השירות הרלוונטיים?</p>
+            <button class="btn" onclick="confirmRequest()">אשר</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('chat-input').addEventListener('focus', function() {
+            document.getElementById('registration-popup').style.display = 'block';
+        });
+
+        function submitRegistration() {
+            // כאן תוכל להוסיף לוגיקה לשליחת פרטי ההרשמה לשרת
+            document.getElementById('registration-popup').style.display = 'none';
+        }
+
+        function sendRequest() {
+            document.getElementById('confirmation-popup').style.display = 'block';
+        }
+
+        function confirmRequest() {
+            // כאן תוכל להוסיף לוגיקה לשליחת הבקשה לשרת
+            document.getElementById('confirmation-popup').style.display = 'none';
+            alert('הבקשה נשלחה בהצלחה!');
+        }
+    </script>
 </body>
 </html>
