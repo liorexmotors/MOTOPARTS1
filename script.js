@@ -1,68 +1,62 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const chatMessages = document.getElementById('chat-messages');
-    const userInput = document.getElementById('user-input');
-    const sendBtn = document.getElementById('send-btn');
-    const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
-    const registerForm = document.getElementById('registerForm');
+    const chatMessages = document.getElementById('chatMessages');
+    const userInput = document.getElementById('userInput');
+    const sendButton = document.getElementById('sendButton');
+    const registrationPopup = document.getElementById('registrationPopup');
+    const registerButton = document.getElementById('registerButton');
+
     let isRegistered = false;
 
-    sendBtn.addEventListener('click', sendMessage);
-    userInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            sendMessage();
-        }
-    });
-
-    function sendMessage() {
-        const message = userInput.value.trim();
-        if (message) {
-            if (!isRegistered) {
-                registerModal.show();
-            } else {
-                addMessage(message, 'user-message');
-                userInput.value = '';
-                setTimeout(() => {
-                    addMessage('הפרטים שלך יועברו לבעלי עסקים שיחזרו אליך עם הצעות. לאשר?', 'system-message');
-                    addConfirmButtons();
-                }, 1000);
-            }
-        }
-    }
-
-    function addMessage(text, className) {
+    function addMessage(message, isUser = true) {
         const messageElement = document.createElement('div');
-        messageElement.classList.add('message', className);
-        messageElement.textContent = text;
+        messageElement.classList.add('message');
+        messageElement.classList.add(isUser ? 'user-message' : 'system-message');
+        messageElement.textContent = message;
         chatMessages.appendChild(messageElement);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    function addConfirmButtons() {
-        const buttonsContainer = document.createElement('div');
-        buttonsContainer.classList.add('d-flex', 'justify-content-end', 'mt-2');
-        
-        const confirmBtn = document.createElement('button');
-        confirmBtn.classList.add('btn', 'btn-success', 'me-2');
-        confirmBtn.textContent = 'אישור';
-        confirmBtn.addEventListener('click', () => {
-            buttonsContainer.remove();
-            addMessage('הפנייה נשלחה בהצלחה! בעלי עסקים יחזרו אליך בקרוב.', 'system-message');
-        });
-
-        const cancelBtn = document.createElement('button');
-        cancelBtn.classList.add('btn', 'btn-secondary');
-        cancelBtn.textContent = 'ביטול';
-        cancelBtn.addEventListener('click', () => buttonsContainer.remove());
-
-        buttonsContainer.appendChild(confirmBtn);
-        buttonsContainer.appendChild(cancelBtn);
-        chatMessages.appendChild(buttonsContainer);
+    function showRegistrationPopup() {
+        registrationPopup.style.display = 'flex';
     }
 
-    registerForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        isRegistered = true;
-        registerModal.hide();
-        addMessage('תודה על ההרשמה! אנא המשך עם בקשתך.', 'system-message');
+    function hideRegistrationPopup() {
+        registrationPopup.style.display = 'none';
+    }
+
+    userInput.addEventListener('input', function() {
+        if (!isRegistered && this.value.length === 1) {
+            showRegistrationPopup();
+        }
+    });
+
+    sendButton.addEventListener('click', function() {
+        const message = userInput.value.trim();
+        if (message) {
+            addMessage(message);
+            userInput.value = '';
+
+            if (isRegistered) {
+                setTimeout(() => {
+                    addMessage('הפרטים שלך יועברו לבעלי עסקים שיחזרו אליך עם הצעות. לאשר?', false);
+                    // כאן יש להוסיף כפתורי אישור וביטול
+                }, 1000);
+            }
+        }
+    });
+
+    registerButton.addEventListener('click', function() {
+        const fullName = document.getElementById('fullName').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        const vehicleType = document.getElementById('vehicleType').value;
+
+        if (fullName && email && phone && vehicleType) {
+            isRegistered = true;
+            hideRegistrationPopup();
+            addMessage('תודה על ההרשמה! אנא המשך את בקשתך.', false);
+        } else {
+            alert('נא למלא את כל השדות');
+        }
     });
 });
